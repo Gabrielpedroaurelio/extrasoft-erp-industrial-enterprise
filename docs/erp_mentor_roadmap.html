@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERP Mentor — AgroMetal · Roadmap Completo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+function toggleFase(header) {
+  header.parentElement.classList.toggle('open');
+}
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'graficos') setTimeout(buildCharts, 100);
+}
+</script>
+<style>
+:root {
+  --bg:       #080B14;
+  --bg2:      #0D1120;
+  --bg3:      #111827;
+  --card:     #131929;
+  --card2:    #1a2235;
+  --border:   rgba(99,130,190,0.15);
+  --border2:  rgba(99,130,190,0.28);
+  --azul:     #3B82F6;
+  --azul2:    #60A5FA;
+  --azul-dim: rgba(59,130,246,0.12);
+  --rosa:     #EC4899;
+  --rosa2:    #F472B6;
+  --rosa-dim: rgba(236,72,153,0.12);
+  --ciano:    #22D3EE;
+  --ciano-dim:rgba(34,211,238,0.1);
+  --verde:    #10B981;
+  --verde-dim:rgba(16,185,129,0.1);
+  --amber:    #F59E0B;
+  --amber-dim:rgba(245,158,11,0.1);
+  --roxo:     #A78BFA;
+  --roxo-dim: rgba(167,139,250,0.1);
+  --text:     #E2E8F0;
+  --text2:    #94A3B8;
+  --text3:    #64748B;
+  --mono:     'JetBrains Mono', monospace;
+  --sans:     'Syne', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Grid background ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; z-index: 0;
+}
+
+/* ── Glow orbs ── */
+.orb {
+  position: fixed; border-radius: 50%;
+  filter: blur(120px); pointer-events: none; z-index: 0;
+}
+.orb1 { width:500px;height:500px;background:rgba(59,130,246,0.06);top:-150px;right:-100px; }
+.orb2 { width:400px;height:400px;background:rgba(236,72,153,0.05);bottom:100px;left:-100px; }
+.orb3 { width:300px;height:300px;background:rgba(34,211,238,0.04);top:50%;right:20%; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--azul); border-radius: 2px; }
+
+/* ── Layout ── */
+.wrap { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* ── Hero ── */
+.hero {
+  padding: 60px 24px 48px;
+  position: relative; z-index: 1;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(59,130,246,0.04) 0%, transparent 100%);
+  margin-bottom: 0;
+}
+.hero-inner { max-width: 1200px; margin: 0 auto; }
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px; letter-spacing: .12em;
+  color: var(--azul2); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block; width: 24px; height: 1px;
+  background: var(--azul2);
+}
+.hero-title {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800; line-height: 1.1;
+  margin-bottom: 8px;
+}
+.hero-title .hl-blue { color: var(--azul2); }
+.hero-title .hl-pink { color: var(--rosa2); }
+.hero-sub {
+  font-size: 15px; color: var(--text2);
+  font-family: var(--mono); margin-bottom: 32px;
+}
+.hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+.hstat { }
+.hstat-val { font-size: 28px; font-weight: 700; color: var(--text); line-height: 1; }
+.hstat-val span { font-size: 14px; color: var(--text3); font-weight: 400; }
+.hstat-label { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 4px; letter-spacing: .06em; }
+
+/* ── Nav tabs ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(8,11,20,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+.nav-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 2px; overflow-x: auto; }
+.nav-tab {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: .06em; color: var(--text3);
+  padding: 14px 16px; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .2s; white-space: nowrap;
+  background: none; border-top: none; border-left: none; border-right: none;
+}
+.nav-tab:hover { color: var(--text2); }
+.nav-tab.active { color: var(--azul2); border-bottom-color: var(--azul2); }
+
+/* ── Sections ── */
+.section { padding: 48px 0; border-bottom: 1px solid var(--border); display: none; }
+.section.active { display: block; }
+.section-head { margin-bottom: 32px; }
+.section-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: .12em; color: var(--rosa2);
+  margin-bottom: 8px;
+}
+.section-title { font-size: 22px; font-weight: 700; color: var(--text); }
+.section-desc { font-size: 13px; color: var(--text2); margin-top: 6px; line-height: 1.6; }
+
+/* ── Cards ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--border2); }
+
+/* ── Fases overview ── */
+.fases-grid { display: flex; flex-direction: column; gap: 12px; }
+.fase-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.fase-card:hover { border-color: var(--border2); }
+.fase-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+.fase-num {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 13px; font-weight: 500;
+  flex-shrink: 0;
+}
+.fase-info { flex: 1; }
+.fase-title-text { font-size: 15px; font-weight: 600; color: var(--text); }
+.fase-meta { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 2px; }
+.fase-badge {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  padding: 3px 10px; border-radius: 20px;
+}
+.badge-done { background: var(--verde-dim); color: var(--verde); border: 1px solid rgba(16,185,129,0.2); }
+.badge-active { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+.badge-todo { background: rgba(100,116,139,0.1); color: var(--text3); border: 1px solid var(--border); }
+.fase-arrow { color: var(--text3); font-size: 12px; transition: transform .2s; }
+.fase-card.open .fase-arrow { transform: rotate(90deg); }
+
+.fase-body { display: none; padding: 0 20px 20px; border-top: 1px solid var(--border); }
+.fase-card.open .fase-body { display: block; padding-top: 16px; }
+
+.step-list { display: flex; flex-direction: column; gap: 2px; }
+.step-item {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 12px; border-radius: 8px;
+  transition: background .15s;
+}
+.step-item:hover { background: var(--card2); }
+.step-marker {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; flex-shrink: 0; margin-top: 1px;
+  border: 1.5px solid;
+}
+.marker-done { border-color: var(--verde); color: var(--verde); background: var(--verde-dim); }
+.marker-todo { border-color: var(--border2); color: var(--text3); }
+.step-content { flex: 1; }
+.step-name2 { font-size: 13px; font-weight: 500; color: var(--text); }
+.step-explain { font-size: 12px; color: var(--text2); margin-top: 2px; line-height: 1.5; }
+.step-tag {
+  display: inline-block; font-family: var(--mono); font-size: 9px;
+  padding: 1px 6px; border-radius: 4px; margin-top: 4px;
+  background: var(--azul-dim); color: var(--azul2);
+  border: 1px solid rgba(59,130,246,0.2);
+}
+
+/* ── Calendário ── */
+.cal-grid { display: flex; flex-direction: column; gap: 6px; }
+.cal-week {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color .2s, transform .1s;
+}
+.cal-week:hover { border-color: var(--border2); transform: translateX(3px); }
+.cal-week-num {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 14px 10px;
+  border-right: 1px solid var(--border);
+  background: var(--card2);
+}
+.cal-week-label { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: .06em; }
+.cal-week-n { font-family: var(--mono); font-size: 18px; font-weight: 500; color: var(--text); line-height: 1; }
+.cal-week-body { padding: 14px 16px; }
+.cal-week-title { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.cal-tasks { display: flex; flex-direction: column; gap: 4px; }
+.cal-task {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; color: var(--text2); line-height: 1.5;
+}
+.cal-task::before { content: '▸'; color: var(--text3); flex-shrink: 0; margin-top: 1px; }
+.cal-task strong { color: var(--text); font-weight: 500; }
+.cal-mentor {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: var(--rosa-dim);
+  border: 1px solid rgba(236,72,153,0.15);
+  border-radius: 6px;
+  font-size: 11px; color: var(--rosa2);
+  font-family: var(--mono);
+  line-height: 1.5;
+}
+.cal-mentor::before { content: '💬 mentor: '; font-weight: 500; }
+.cal-milestone {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--mono); font-size: 9px; font-weight: 500;
+  padding: 2px 8px; border-radius: 20px; margin-bottom: 6px;
+}
+
+/* ── Gantt ── */
+.gantt-outer { overflow-x: auto; }
+.gantt-table { min-width: 900px; width: 100%; }
+.gantt-th {
+  display: grid; grid-template-columns: 180px 1fr;
+  background: var(--card2);
+  border-radius: 10px 10px 0 0;
+  border: 1px solid var(--border); border-bottom: none;
+}
+.gantt-th-label {
+  padding: 10px 16px;
+  font-family: var(--mono); font-size: 10px; color: var(--text3);
+  border-right: 1px solid var(--border);
+}
+.gantt-weeks-header {
+  display: grid; grid-template-columns: repeat(24, 1fr);
+}
+.gantt-wh {
+  padding: 10px 0; text-align: center;
+  font-family: var(--mono); font-size: 9px; color: var(--text3);
+  border-right: 1px solid var(--border);
+}
+.gantt-wh:last-child { border-right: none; }
+.gantt-body { border: 1px solid var(--border); border-radius: 0 0 10px 10px; overflow: hidden; }
+.gantt-row2 {
+  display: grid; grid-template-columns: 180px 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.gantt-row2:last-child { border-bottom: none; }
+.gantt-row2:hover { background: var(--card2); }
+.gantt-info2 {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  border-right: 1px solid var(--border);
+}
+.gantt-dot2 { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.gantt-name2 { font-size: 12px; font-weight: 500; color: var(--text); }
+.gantt-hrs2 { font-family: var(--mono); font-size: 9px; color: var(--text3); }
+.gantt-bars {
+  display: grid; grid-template-columns: repeat(24, 1fr);
+  align-items: center; padding: 6px 0;
+}
+.gantt-cell2 {
+  height: 28px; border-right: 1px solid rgba(99,130,190,0.06);
+  position: relative;
+}
+.gantt-cell2:last-child { border-right: none; }
+.gantt-fill {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  height: 20px; border-radius: 4px;
+  left: 1px;
+  display: flex; align-items: center; padding-left: 6px;
+  font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,0.7);
+  overflow: hidden; white-space: nowrap;
+}
+
+/* ── Gráficos ── */
+.charts-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.chart-card2 {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px;
+}
+.chart-title2 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.chart-sub2 { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-bottom: 16px; }
+.chart-wrap { position: relative; height: 200px; }
+
+/* ── MoSCoW ── */
+.moscow-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.moscow-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 18px; overflow: hidden; position: relative;
+}
+.moscow-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+}
+.moscow-m::before { background: var(--rosa); }
+.moscow-s::before { background: var(--azul); }
+.moscow-c::before { background: var(--roxo); }
+.moscow-w::before { background: var(--text3); }
+.moscow-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: .08em; margin-bottom: 12px;
+}
+.moscow-m .moscow-label { color: var(--rosa2); }
+.moscow-s .moscow-label { color: var(--azul2); }
+.moscow-c .moscow-label { color: var(--roxo); }
+.moscow-w .moscow-label { color: var(--text3); }
+.moscow-items { display: flex; flex-direction: column; gap: 6px; }
+.moscow-item { font-size: 12px; color: var(--text2); display: flex; gap: 8px; align-items: flex-start; line-height: 1.4; }
+.moscow-item::before { content: '—'; color: var(--text3); flex-shrink: 0; }
+
+/* ── User stories ── */
+.stories-grid { display: flex; flex-direction: column; gap: 10px; }
+.story-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px;
+}
+.story-header { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+.story-id { font-family: var(--mono); font-size: 10px; color: var(--text3); padding: 2px 6px; background: var(--card2); border-radius: 4px; flex-shrink: 0; }
+.story-module { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 4px; flex-shrink: 0; }
+.story-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+.story-ac { margin-top: 10px; }
+.story-ac-title { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: .06em; margin-bottom: 6px; }
+.ac-item { font-family: var(--mono); font-size: 11px; color: var(--ciano); padding: 3px 0; display: flex; gap: 6px; }
+.ac-item::before { content: '→'; color: var(--text3); }
+
+/* ── ERD preview ── */
+.erd-note {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px;
+}
+.erd-tables { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.erd-table {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 8px; overflow: hidden;
+}
+.erd-table-name {
+  padding: 8px 12px; font-family: var(--mono); font-size: 11px;
+  font-weight: 500; border-bottom: 1px solid var(--border);
+}
+.erd-field {
+  padding: 5px 12px; font-family: var(--mono); font-size: 10px;
+  color: var(--text2); border-bottom: 1px solid rgba(99,130,190,0.07);
+  display: flex; justify-content: space-between;
+}
+.erd-field:last-child { border-bottom: none; }
+.erd-type { color: var(--text3); }
+.erd-pk { color: var(--amber); }
+.erd-fk { color: var(--rosa2); }
+
+/* ── ADR ── */
+.adr-list { display: flex; flex-direction: column; gap: 10px; }
+.adr-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
+}
+.adr-header {
+  display: flex; gap: 12px; align-items: center;
+  padding: 14px 18px; border-bottom: 1px solid var(--border);
+}
+.adr-id { font-family: var(--mono); font-size: 10px; color: var(--text3); }
+.adr-title { font-size: 13px; font-weight: 600; flex: 1; }
+.adr-status { font-family: var(--mono); font-size: 10px; color: var(--verde); }
+.adr-body { padding: 14px 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.adr-section-t { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: .06em; margin-bottom: 6px; }
+.adr-text { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.section.active > * {
+  animation: fadeUp .4s ease both;
+}
+
+@media (max-width: 768px) {
+  .charts-grid2 { grid-template-columns: 1fr; }
+  .moscow-grid { grid-template-columns: 1fr; }
+  .erd-tables { grid-template-columns: 1fr 1fr; }
+  .hero-stats { gap: 20px; }
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">ERP · AGROMETALÚRGICA LDA. · LUANDA, ANGOLA</div>
+    <h1 class="hero-title">
+      Roadmap <span class="hl-blue">Completo</span><br>
+      de <span class="hl-pink">Engenharia</span>
+    </h1>
+    <div class="hero-sub">Node.js · TypeScript · PostgreSQL · React · Clean Architecture</div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-val">24<span>sem</span></div><div class="hstat-label">DURAÇÃO TOTAL</div></div>
+      <div class="hstat"><div class="hstat-val">~192<span>h</span></div><div class="hstat-label">HORAS TOTAIS</div></div>
+      <div class="hstat"><div class="hstat-val">8<span>h/sem</span></div><div class="hstat-label">DEDICAÇÃO</div></div>
+      <div class="hstat"><div class="hstat-val">4</div><div class="hstat-label">MÓDULOS ERP</div></div>
+      <div class="hstat"><div class="hstat-val">S7</div><div class="hstat-label">PORTFÓLIO MÍNIMO</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-tab active" onclick="showTab('fases')">01 · FASES</button>
+    <button class="nav-tab" onclick="showTab('calendario')">02 · CALENDÁRIO</button>
+    <button class="nav-tab" onclick="showTab('gantt')">03 · GANTT</button>
+    <button class="nav-tab" onclick="showTab('moscow')">04 · MoSCoW</button>
+    <button class="nav-tab" onclick="showTab('stories')">05 · USER STORIES</button>
+    <button class="nav-tab" onclick="showTab('erd')">06 · ERD PREVIEW</button>
+    <button class="nav-tab" onclick="showTab('adr')">07 · ADRs</button>
+    <button class="nav-tab" onclick="showTab('graficos')">08 · GRÁFICOS</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ══ FASES ══════════════════════════════════════════════════════════ -->
+<section id="fases" class="section active">
+  <div class="section-head">
+    <div class="section-label">VISÃO GERAL</div>
+    <div class="section-title">Todas as fases do projecto</div>
+    <div class="section-desc">Clica em cada fase para expandir os passos detalhados. Segue esta ordem rigorosamente — não saltes etapas.</div>
+  </div>
+  <div class="fases-grid">
+
+    <div class="fase-card open">
+      <div class="fase-header" onclick="toggleFase(this)">
+        <div class="fase-num" style="background:rgba(16,185,129,0.15);color:var(--verde)">0</div>
+        <div class="fase-info">
+          <div class="fase-title-text">Discovery & Requirements</div>
+          <div class="fase-meta">Perceber o problema antes de tocar em código · Semanas 1–2 (estudo)</div>
+        </div>
+        <div class="fase-badge badge-active">EM CURSO</div>
+        <div class="fase-arrow">▶</div>
+      </div>
+      <div class="fase-body">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-marker marker-done">✓</div>
+            <div class="step-content">
+              <div class="step-name2">BRD — Business Requirements Document</div>
+              <div class="step-explain">Feito. AgroMetal Lda. — contexto, problemas com custos reais, objectivos, stakeholders, restrições, critérios de sucesso.</div>
+              <span class="step-tag">CONCLUÍDO</span>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">User Stories + Acceptance Criteria</div>
+              <div class="step-explain">Para cada módulo: "Como [actor], quero [acção] para [objectivo]." Cada story tem critérios DADO/QUANDO/ENTÃO que definem o que é "feito".</div>
+              <span class="step-tag">A FAZER</span>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Priorização MoSCoW</div>
+              <div class="step-explain">Separar Must Have (sem isto o sistema falha) de Should/Could/Won't. Com 6 meses e sozinho, não podes construir tudo — MoSCoW define o MVP real.</div>
+              <span class="step-tag">A FAZER</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fase-card">
+      <div class="fase-header" onclick="toggleFase(this)">
+        <div class="fase-num" style="background:var(--azul-dim);color:var(--azul2)">1</div>
+        <div class="fase-info">
+          <div class="fase-title-text">System Design & Architecture</div>
+          <div class="fase-meta">O blueprint completo do sistema · Semanas 3–5 (estudo)</div>
+        </div>
+        <div class="fase-badge badge-todo">PENDENTE</div>
+        <div class="fase-arrow">▶</div>
+      </div>
+      <div class="fase-body">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">High Level Design (HLD)</div>
+              <div class="step-explain">Diagrama dos grandes blocos: React SPA → API Node.js → módulos (Stock/RH/Finanças/Vendas) → PostgreSQL. Como tudo comunica, sem detalhes de implementação.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Diagrama de Casos de Uso</div>
+              <div class="step-explain">Actores (Admin, Gestor de Armazém, RH, Contabilista, Comercial) e as acções que cada um pode realizar. Usa dbdiagram.io ou draw.io.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Diagrama de Classes do Domínio</div>
+              <div class="step-explain">Entidades: Product, StockMovement, Employee, Payroll, Transaction, Account, Customer, Order, OrderItem. Atributos, métodos de negócio, relações entre classes.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">ERD Completo — todos os módulos</div>
+              <div class="step-explain">Todas as tabelas, colunas com tipos PostgreSQL, PKs (UUID), FKs, UNIQUE, NOT NULL, CHECK constraints, índices. Soft delete (deleted_at) em todas as tabelas. Usa dbdiagram.io.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Interfaces dos Repositórios</div>
+              <div class="step-explain">TypeScript interfaces: IProductRepository, IEmployeeRepository, ITransactionRepository, IOrderRepository. Define os métodos (findById, findAll, save, update, delete) antes de implementar.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">API Design com OpenAPI/Swagger</div>
+              <div class="step-explain">Documenta todos os endpoints antes de criar um controller. Método HTTP, URL, body esperado, responses, status codes. O frontend e backend podem ser desenvolvidos em paralelo.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">ADRs — Architecture Decision Records</div>
+              <div class="step-explain">Documenta: raw SQL com pg (vs Prisma), Clean Architecture, JWT + RBAC, estrutura de pastas. Escreves o contexto, a decisão e as consequências de cada escolha.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fase-card">
+      <div class="fase-header" onclick="toggleFase(this)">
+        <div class="fase-num" style="background:rgba(100,116,139,0.15);color:var(--text3)">2</div>
+        <div class="fase-info">
+          <div class="fase-title-text">Project Setup & Infrastructure</div>
+          <div class="fase-meta">Preparar o terreno — feito uma vez, serve o projecto inteiro · Semana 1 de dev</div>
+        </div>
+        <div class="fase-badge badge-todo">PENDENTE</div>
+        <div class="fase-arrow">▶</div>
+      </div>
+      <div class="fase-body">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Estrutura de pastas — Clean Architecture</div>
+              <div class="step-explain">Cria: src/domain/, src/application/use-cases/, src/infrastructure/database/, src/interfaces/http/. Esta estrutura garante que a lógica de negócio nunca depende de Express ou pg directamente.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">TypeScript + ESLint + Prettier + Husky</div>
+              <div class="step-explain">Configura tsconfig.json com strict: true. ESLint para apanhar erros. Prettier para formatação automática. Husky para bloquear commits com erros. Faz isto antes de escrever código de negócio.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Git Strategy + Conventional Commits</div>
+              <div class="step-explain">Branches: main (produção), develop (integração), feature/nome-feature. Commits: feat(stock): add low stock alert. Isto cria um histórico limpo que impressiona em portfólio.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Docker Compose — PostgreSQL local</div>
+              <div class="step-explain">docker-compose.yml com serviço postgres:16. Nunca instales PostgreSQL directamente na máquina — Docker garante que o ambiente é reproduzível e não polui o sistema.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Migrations SQL manuais</div>
+              <div class="step-explain">Como usas raw SQL com pg, crias os ficheiros de migration manualmente: 001_create_users.sql, 002_create_products.sql. Cada migration é irreversível para baixo — pensa bem antes de correr.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fase-card">
+      <div class="fase-header" onclick="toggleFase(this)">
+        <div class="fase-num" style="background:var(--rosa-dim);color:var(--rosa2)">3</div>
+        <div class="fase-info">
+          <div class="fase-title-text">Core Backend Development</div>
+          <div class="fase-meta">Domain → Application → Infrastructure → Interfaces · Semanas 2–14 de dev</div>
+        </div>
+        <div class="fase-badge badge-todo">PENDENTE</div>
+        <div class="fase-arrow">▶</div>
+      </div>
+      <div class="fase-body">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Auth — JWT + RBAC</div>
+              <div class="step-explain">POST /auth/login → verifica password com bcrypt → gera accessToken (15min) + refreshToken (7 dias). Middleware que valida token em cada route protegida. Roles: admin, manager, warehouse, hr, accountant, sales.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Domain Layer — Entidades puras</div>
+              <div class="step-explain">Classes TypeScript com validação interna: Product.create() lança erro se nome &lt; 2 chars. product.decreaseStock() lança erro se stock insuficiente. Zero imports de Express, pg ou qualquer biblioteca externa.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Repository Layer — raw SQL com pg</div>
+              <div class="step-explain">ProductRepository implementa IProductRepository usando Pool do pg. Queries parametrizadas sempre: query('SELECT * FROM products WHERE id = $1', [id]). Nunca concatenas strings em SQL.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Use Cases por módulo</div>
+              <div class="step-explain">Cada Use Case faz uma única coisa: CreateProductUseCase, UpdateStockUseCase, ProcessSalaryUseCase, CreateSaleUseCase. Recebe DTO, orquestra Domain + Repository, retorna resultado.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Controllers + Validação com Zod</div>
+              <div class="step-explain">Controller não tem lógica de negócio. Recebe request → valida com Zod → chama Use Case → retorna response. Se Zod falha, responde 400 automaticamente.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Error Handling centralizado</div>
+              <div class="step-explain">Middleware global de erros no final da app Express. AppError (400), NotFoundError (404), ConflictError (409). Erros inesperados retornam 500 sem expor detalhes ao cliente.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fase-card">
+      <div class="fase-header" onclick="toggleFase(this)">
+        <div class="fase-num" style="background:var(--roxo-dim);color:var(--roxo)">4</div>
+        <div class="fase-info">
+          <div class="fase-title-text">Frontend Development</div>
+          <div class="fase-meta">React + TypeScript + React Query · Semanas 15–20 de dev</div>
+        </div>
+        <div class="fase-badge badge-todo">PENDENTE</div>
+        <div class="fase-arrow">▶</div>
+      </div>
+      <div class="fase-body">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Setup React + TypeScript + React Router + Tailwind</div>
+              <div class="step-explain">Estrutura: src/features/stock/, src/features/hr/, src/components/ui/, src/lib/api/. Um router protegido que verifica se há token antes de renderizar qualquer página.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Axios + interceptors + React Query</div>
+              <div class="step-explain">Interceptor de request: adiciona Bearer token. Interceptor de response: se 401, tenta refresh. Se falha o refresh, logout. React Query: useQuery para GET, useMutation para POST/PUT/DELETE.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">UI por módulo — Stock → Vendas → RH → Finanças</div>
+              <div class="step-explain">Um módulo de cada vez. Tabelas, formulários, dashboards com KPIs. Segue Atomic Design: Atoms (Button, Input) → Molecules (SearchInput) → Organisms (ProductTable) → Pages.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fase-card">
+      <div class="fase-header" onclick="toggleFase(this)">
+        <div class="fase-num" style="background:var(--ciano-dim);color:var(--ciano)">5–6</div>
+        <div class="fase-info">
+          <div class="fase-title-text">Testing, Deploy & Observability</div>
+          <div class="fase-meta">Qualidade e produção · Semanas 21–24 de dev</div>
+        </div>
+        <div class="fase-badge badge-todo">PENDENTE</div>
+        <div class="fase-arrow">▶</div>
+      </div>
+      <div class="fase-body">
+        <div class="step-list">
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Testes unitários — Vitest</div>
+              <div class="step-explain">Testa Use Cases com repositórios mock. Exemplo: CreateProductUseCase com MockProductRepository. Não precisas de base de dados para testar lógica de negócio — essa é a vantagem da Clean Architecture.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Segurança OWASP — Helmet + Rate Limiting + CORS</div>
+              <div class="step-explain">helmet() nos headers. express-rate-limit nos endpoints públicos. CORS configurado só para o domínio do frontend. UUID em vez de IDs sequenciais. Nunca retornas passwords mesmo em hash.</div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-marker marker-todo"></div>
+            <div class="step-content">
+              <div class="step-name2">Docker + Deploy + Winston Logging</div>
+              <div class="step-explain">Dockerfile multi-stage. docker-compose para produção. Winston com logs em JSON (fácil de pesquisar). GET /health que verifica DB. Deploy inicial no Railway (~$5/mês) para demo ao cliente.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ CALENDÁRIO ═══════════════════════════════════════════════════════ -->
+<section id="calendario" class="section">
+  <div class="section-head">
+    <div class="section-label">SEMANA A SEMANA</div>
+    <div class="section-title">O que fazer em cada semana</div>
+    <div class="section-desc">Este é o teu plano de trabalho como dev sénior pensaria. Cada semana tem tarefas concretas e uma nota do mentor.</div>
+  </div>
+  <div class="cal-grid" id="calGrid"></div>
+</section>
+
+<!-- ══ GANTT ════════════════════════════════════════════════════════════ -->
+<section id="gantt" class="section">
+  <div class="section-head">
+    <div class="section-label">CRONOGRAMA VISUAL</div>
+    <div class="section-title">Diagrama de Gantt — 24 semanas</div>
+  </div>
+  <div class="gantt-outer">
+    <div class="gantt-table">
+      <div class="gantt-th">
+        <div class="gantt-th-label">Fase / Módulo</div>
+        <div class="gantt-weeks-header" id="ganttHeader"></div>
+      </div>
+      <div class="gantt-body" id="ganttBody"></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:16px;">
+    <div style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:#64748B"></div>Setup</div>
+    <div style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:#3B82F6"></div>Stock</div>
+    <div style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:#A78BFA"></div>Vendas</div>
+    <div style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:#10B981"></div>RH</div>
+    <div style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:#F59E0B"></div>Finanças</div>
+    <div style="display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;color:var(--text3)"><div style="width:10px;height:10px;border-radius:2px;background:#22D3EE"></div>Deploy</div>
+  </div>
+</section>
+
+<!-- ══ MoSCoW ═══════════════════════════════════════════════════════════ -->
+<section id="moscow" class="section">
+  <div class="section-head">
+    <div class="section-label">PRIORIZAÇÃO</div>
+    <div class="section-title">Framework MoSCoW — o que é MVP</div>
+    <div class="section-desc">Com 6 meses e 1 developer, não podes construir tudo. MoSCoW define o que entra no MVP e o que fica para versões futuras.</div>
+  </div>
+  <div class="moscow-grid">
+    <div class="moscow-card moscow-m">
+      <div class="moscow-label">M — MUST HAVE · sem isto o sistema falha</div>
+      <div class="moscow-items">
+        <div class="moscow-item">Login/logout com JWT e roles por utilizador</div>
+        <div class="moscow-item">CRUD completo de produtos e categorias</div>
+        <div class="moscow-item">Registo de entradas e saídas de stock</div>
+        <div class="moscow-item">Alertas automáticos de stock mínimo</div>
+        <div class="moscow-item">Gestão de funcionários (ficha completa)</div>
+        <div class="moscow-item">Registo de presenças e faltas</div>
+        <div class="moscow-item">Processamento básico de salários</div>
+        <div class="moscow-item">Criação de clientes e orçamentos</div>
+        <div class="moscow-item">Emissão de facturas com PDF</div>
+        <div class="moscow-item">Integração Vendas → Stock (baixa automática)</div>
+        <div class="moscow-item">Contas a pagar e a receber</div>
+        <div class="moscow-item">Fluxo de caixa em tempo real</div>
+      </div>
+    </div>
+    <div class="moscow-card moscow-s">
+      <div class="moscow-label">S — SHOULD HAVE · importante mas não bloqueia</div>
+      <div class="moscow-items">
+        <div class="moscow-item">Relatórios exportáveis em PDF e Excel</div>
+        <div class="moscow-item">Dashboard com KPIs dos 4 módulos</div>
+        <div class="moscow-item">Histórico de movimentações de stock</div>
+        <div class="moscow-item">Envio de orçamentos por email</div>
+        <div class="moscow-item">Cálculo automático de subsídios e impostos</div>
+        <div class="moscow-item">Múltiplos armazéns / localizações</div>
+        <div class="moscow-item">Gráficos de evolução financeira mensal</div>
+        <div class="moscow-item">Log de auditoria (quem fez o quê e quando)</div>
+      </div>
+    </div>
+    <div class="moscow-card moscow-c">
+      <div class="moscow-label">C — COULD HAVE · bom ter se houver tempo</div>
+      <div class="moscow-items">
+        <div class="moscow-item">Notificações por email (stock crítico, salários)</div>
+        <div class="moscow-item">Importação de dados via CSV</div>
+        <div class="moscow-item">App mobile (versão PWA)</div>
+        <div class="moscow-item">Integração com contabilidade externa</div>
+        <div class="moscow-item">Portal do colaborador (self-service RH)</div>
+        <div class="moscow-item">Scanner de código de barras para stock</div>
+      </div>
+    </div>
+    <div class="moscow-card moscow-w">
+      <div class="moscow-label">W — WON'T HAVE · não nesta versão</div>
+      <div class="moscow-items">
+        <div class="moscow-item">BI avançado com previsões (ML/IA)</div>
+        <div class="moscow-item">Integração com Multicaixa/ProxyPay</div>
+        <div class="moscow-item">Módulo de produção (ordens de fabrico)</div>
+        <div class="moscow-item">CRM avançado com pipeline de vendas</div>
+        <div class="moscow-item">Multi-empresa / multi-moeda completo</div>
+        <div class="moscow-item">API pública para integrações de terceiros</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ USER STORIES ═════════════════════════════════════════════════════ -->
+<section id="stories" class="section">
+  <div class="section-head">
+    <div class="section-label">REQUISITOS</div>
+    <div class="section-title">User Stories + Acceptance Criteria</div>
+    <div class="section-desc">O que cada actor precisa fazer e como sabes que está feito. Formato: DADO / QUANDO / ENTÃO.</div>
+  </div>
+  <div class="stories-grid" id="storiesGrid"></div>
+</section>
+
+<!-- ══ ERD PREVIEW ══════════════════════════════════════════════════════ -->
+<section id="erd" class="section">
+  <div class="section-head">
+    <div class="section-label">BASE DE DADOS</div>
+    <div class="section-title">ERD Preview — estrutura das tabelas</div>
+    <div class="section-desc">Estrutura base das tabelas principais. O ERD completo deve ser feito em dbdiagram.io com todas as relações, constraints e índices.</div>
+  </div>
+  <div class="erd-note">
+    <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:16px;padding:10px 12px;background:var(--amber-dim);border:1px solid rgba(245,158,11,0.2);border-radius:6px;">
+      ⚠ MENTOR: Este é apenas um preview. O teu próximo passo é abrir dbdiagram.io e construir o ERD completo com TODAS as relações (FK), constraints (NOT NULL, UNIQUE, CHECK), e índices. Só depois avanças para código.
+    </div>
+    <div class="erd-tables" id="erdTables"></div>
+  </div>
+</section>
+
+<!-- ══ ADRs ═════════════════════════════════════════════════════════════ -->
+<section id="adr" class="section">
+  <div class="section-head">
+    <div class="section-label">DECISÕES DE ARQUITECTURA</div>
+    <div class="section-title">Architecture Decision Records</div>
+    <div class="section-desc">Cada decisão técnica importante deve ser documentada. Isto mostra maturidade de engenharia e protege-te quando alguém perguntar "porque escolheste X?"</div>
+  </div>
+  <div class="adr-list" id="adrList"></div>
+</section>
+
+<!-- ══ GRÁFICOS ══════════════════════════════════════════════════════════ -->
+<section id="graficos" class="section">
+  <div class="section-head">
+    <div class="section-label">ANÁLISE VISUAL</div>
+    <div class="section-title">Distribuição e métricas do projecto</div>
+  </div>
+  <div class="charts-grid2">
+    <div class="chart-card2">
+      <div class="chart-title2">Distribuição de horas por fase</div>
+      <div class="chart-sub2">TOTAL ~192H · 24 SEMANAS</div>
+      <div class="chart-wrap"><canvas id="c1"></canvas></div>
+    </div>
+    <div class="chart-card2">
+      <div class="chart-title2">Horas acumuladas ao longo do tempo</div>
+      <div class="chart-sub2">8H/SEMANA · PROGRESSÃO LINEAR</div>
+      <div class="chart-wrap"><canvas id="c2"></canvas></div>
+    </div>
+    <div class="chart-card2">
+      <div class="chart-title2">Complexidade por módulo</div>
+      <div class="chart-sub2">ENTIDADES + INTEGRAÇÕES + REGRAS DE NEGÓCIO</div>
+      <div class="chart-wrap"><canvas id="c3"></canvas></div>
+    </div>
+    <div class="chart-card2">
+      <div class="chart-title2">Radar de risco — Stock vs Finanças</div>
+      <div class="chart-sub2">SCORE 0–10 POR DIMENSÃO DE RISCO</div>
+      <div class="chart-wrap"><canvas id="c4"></canvas></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<script>
+// ── Tab nav + Fase toggle definidos no head ──────────────────────────────
+
+// ── Calendário ───────────────────────────────────────────────────────────
+const semanas = [
+  { n:1,  fase:'Fase 0', cor:'var(--verde)', title:'BRD + User Stories', milestone:null,
+    tasks:['Finaliza o BRD (já feito) — lê-o e garante que entendes cada secção','Escreve User Stories para o módulo de Stock (mínimo 5 stories)','Define Acceptance Criteria para cada story com formato DADO/QUANDO/ENTÃO','Cria conta em dbdiagram.io e Swagger Editor — ferramentas que vais usar na Fase 1'],
+    mentor:'Não avanças para a Fase 1 sem ter as User Stories escritas. São o teu contrato contigo mesmo sobre o que vais construir.' },
+  { n:2,  fase:'Fase 0', cor:'var(--verde)', title:'User Stories restantes + MoSCoW',
+    tasks:['User Stories para RH, Finanças e Vendas','Classifica cada feature com MoSCoW — seja brutal, tens 6 meses','Valida com alguém (colega, formador) se o Must Have faz sentido','Documenta os actores do sistema: Admin, Gestor Armazém, RH, Contabilista, Comercial'],
+    mentor:'O MoSCoW não é teórico. Se não fizeres isto agora, vais tentar construir tudo ao mesmo tempo e não acabas nada.' },
+  { n:3,  fase:'Fase 1', cor:'var(--azul2)', title:'HLD + Diagrama de Casos de Uso',
+    tasks:['Desenha o HLD: React → API Node.js → módulos → PostgreSQL (usa draw.io)','Identifica todos os casos de uso por actor — diagrama UML simples','Para cada caso de uso: nome, actor, pré-condições, fluxo principal, fluxo alternativo','Revê o HLD com o guia de engenharia — compara com o exemplo do guia'],
+    mentor:'O HLD é o mapa. Se não tens mapa, constróis a estrada errada. Não precisas de perfeição — precisas de clareza.' },
+  { n:4,  fase:'Fase 1', cor:'var(--azul2)', title:'Diagrama de Classes do Domínio',
+    tasks:['Identifica todas as entidades: Product, StockMovement, Employee, Department, Payroll, Transaction, Account, Customer, Order, OrderItem, Invoice','Para cada entidade: atributos com tipos TypeScript, métodos de negócio','Desenha relações entre classes (1:N, N:N, composição)','Pergunta-te: quais as regras de negócio que vivem dentro de cada entidade?'],
+    mentor:'A entidade Product não é só uma tabela. É uma classe com comportamento: product.decreaseStock() lança erro se stock insuficiente. Isso é domínio.' },
+  { n:5,  fase:'Fase 1', cor:'var(--azul2)', title:'ERD Completo no dbdiagram.io',
+    tasks:['Cria todas as tabelas no dbdiagram.io com colunas tipadas (UUID, VARCHAR, NUMERIC, TIMESTAMPTZ)','Define PKs (UUID gerado pelo PostgreSQL), FKs com ON DELETE behaviour','Adiciona constraints: NOT NULL, UNIQUE, CHECK (ex: price > 0)','Adiciona soft delete: deleted_at TIMESTAMPTZ NULL em todas as tabelas','Adiciona audit trail: created_at, updated_at, created_by em todas as tabelas'],
+    mentor:'Soft delete é obrigatório em sistemas empresariais. Nunca apaga dados — marca como eliminado. Em Angola, auditoria pode ser requisito legal.' },
+  { n:6,  fase:'Fase 1', cor:'var(--azul2)', title:'Interfaces dos Repositórios + API Design',
+    tasks:['Cria ficheiros TypeScript com as interfaces: IProductRepository, IEmployeeRepository, ITransactionRepository, IOrderRepository','Cada interface define os métodos sem implementação — só o contrato','Abre o Swagger Editor e documenta todos os endpoints: método, URL, body, responses','Exemplo: POST /api/v1/stock/products com body e resposta 201 documentados'],
+    mentor:'Definir as interfaces ANTES de implementar é o que separa arquitectura de código esparguete. O repositório é uma promessa — a implementação cumpre-a.' },
+  { n:7,  fase:'Fase 1→2', cor:'var(--ciano)', title:'ADRs + Setup do Projecto', milestone:'🏁 Fase 1 concluída',
+    tasks:['Escreve ADR-001: PostgreSQL raw SQL com pg vs Prisma (contexto, decisão, consequências)','Escreve ADR-002: Clean Architecture vs MVC simples','Escreve ADR-003: JWT stateless vs sessions','Inicia o projecto: npm init, instala TypeScript, configura tsconfig.json com strict: true','Cria a estrutura de pastas Clean Architecture completa'],
+    mentor:'Os ADRs são o teu diário de engenheiro. Daqui a 3 meses, quando alguém perguntar "porquê raw SQL?", tens a resposta documentada.' },
+  { n:8,  fase:'Fase 2', cor:'var(--text3)', title:'Setup completo da infraestrutura',
+    tasks:['Configura ESLint + Prettier + Husky — testa que o commit é bloqueado com erros','Cria docker-compose.yml com PostgreSQL 16 — testa que sobe com docker-compose up','Cria o sistema de migrations manual: pasta migrations/, script para correr migrations','Cria o primeiro migration: 001_create_users_and_roles.sql','Testa a conexão pg.Pool com a base de dados local'],
+    mentor:'Testa TUDO nesta semana antes de escrever código de negócio. Uma infraestrutura instável vai destruir a tua produtividade nas próximas semanas.' },
+  { n:9,  fase:'Fase 3', cor:'var(--rosa2)', title:'Auth — JWT + RBAC completo',
+    tasks:['Cria migration: users, roles, user_roles','Domain: User.create() com validação de email e password','Infrastructure: UserRepository com raw SQL (findByEmail, save)','Use Case: LoginUseCase — verifica bcrypt, gera accessToken + refreshToken','Controller: POST /auth/login, POST /auth/refresh, POST /auth/logout','Middleware: authenticateToken, authorizeRole(["admin", "manager"])'],
+    mentor:'Auth é a fundação de tudo. Testa exaustivamente: token expirado, token inválido, role insuficiente. Não avances para os módulos sem auth a funcionar 100%.' },
+  { n:10, fase:'Fase 3 · Stock', cor:'#3B82F6', title:'Stock — Domain + Repository',
+    tasks:['Migration: products, categories, stock_movements','Domain: classe Product com métodos decreaseStock(), increaseStock(), isLowStock()','Domain: classe StockMovement (tipo: entrada/saída, quantidade, motivo)','Infrastructure: ProductRepository implementa IProductRepository com raw SQL','Testa queries: findById, findAll com filtros, findLowStock, save, update'],
+    mentor:'Cada query SQL deve usar parâmetros ($1, $2). Nunca concatenas strings. Um SQL injection no ERP de um cliente é o fim da tua reputação.' },
+  { n:11, fase:'Fase 3 · Stock', cor:'#3B82F6', title:'Stock — Use Cases + Controllers', milestone:'⭐ Portfólio mínimo',
+    tasks:['Use Cases: CreateProductUseCase, UpdateStockUseCase, GetLowStockUseCase, DeleteProductUseCase','Controllers: ProductController com Zod validation em todos os endpoints','Routes: /api/v1/stock/products e /api/v1/stock/movements','Testa todos os endpoints com Insomnia ou Postman','Error handling: produto não encontrado (404), SKU duplicado (409)'],
+    mentor:'MARCO: com isto tens um módulo de Stock completo e testável. É o que levas para a entrevista da ITGest se ela acontecer agora. Documenta no README.' },
+  { n:12, fase:'Fase 3 · Vendas', cor:'#A78BFA', title:'Vendas — Domain + Repository',
+    tasks:['Migration: customers, orders, order_items, invoices','Domain: Customer, Order (com método calculateTotal()), OrderItem, Invoice','Infrastructure: CustomerRepository, OrderRepository com raw SQL','Relação crítica: OrderRepository.create() deve decrementar stock em transacção SQL','Testa transacções: se stock insuficiente, a ordem é revertida (ROLLBACK)'],
+    mentor:'Transacções SQL são críticas aqui. Uma venda que baixa stock deve ser atómica — ou ambas as operações acontecem, ou nenhuma. Usa BEGIN/COMMIT/ROLLBACK.' },
+  { n:13, fase:'Fase 3 · Vendas', cor:'#A78BFA', title:'Vendas — Use Cases + Controllers + PDF',
+    tasks:['Use Cases: CreateSaleUseCase, GenerateInvoiceUseCase, UpdateOrderStatusUseCase','Controllers e routes: /api/v1/sales/','Geração de factura em PDF com pdfkit','Integração completa: venda criada → stock diminui automaticamente','Testa fluxo end-to-end: criar cliente → criar ordem → gerar factura → verificar stock'],
+    mentor:'O fluxo Venda → Stock é a integração mais importante do ERP. Testa com stock insuficiente, testa com múltiplos produtos, testa cancelamento.' },
+  { n:14, fase:'Fase 3 · RH', cor:'#10B981', title:'RH — Domain + Repository',
+    tasks:['Migration: employees, departments, attendance, payroll, payroll_items','Domain: Employee, Department, Attendance, Payroll com calculateGrossSalary()','Infrastructure: EmployeeRepository, AttendanceRepository, PayrollRepository','Lógica de cálculo salarial no domain: salário base + subsídios - descontos','Testa cálculos: funcionário com 2 faltas, com horas extra, com subsídio de turno'],
+    mentor:'Processamento salarial tem muitos edge cases: feriados, faltas justificadas vs injustificadas, horas extra em diferentes escalões. Documenta as regras antes de implementar.' },
+  { n:15, fase:'Fase 3 · RH', cor:'#10B981', title:'RH — Use Cases + Controllers',
+    tasks:['Use Cases: CreateEmployeeUseCase, RecordAttendanceUseCase, ProcessMonthlyPayrollUseCase','Controllers e routes: /api/v1/hr/','Processamento em lote: ProcessMonthlyPayrollUseCase processa todos os funcionários do mês','Relatório de presenças por departamento','Testa: processar salários de 5 funcionários fictícios com diferentes cenários'],
+    mentor:'ProcessMonthlyPayrollUseCase é o Use Case mais complexo do projecto. Quebra-o em passos pequenos: busca funcionários → calcula cada um → guarda resultados → retorna resumo.' },
+  { n:16, fase:'Fase 3 · Finanças', cor:'#F59E0B', title:'Finanças — Domain + Repository',
+    tasks:['Migration: accounts, transactions, financial_categories, budget_periods','Domain: Transaction, Account (com balance calculado), FinancialCategory','Infrastructure: TransactionRepository, AccountRepository com raw SQL','Query complexa: getCashFlow() — soma de entradas e saídas por período','Integração: salários processados → cria transação de saída automaticamente'],
+    mentor:'Finanças é o módulo mais complexo. O balance de uma conta não é uma coluna — é a soma de todas as transações. Nunca guardas balance directamente; calculas sempre.' },
+  { n:17, fase:'Fase 3 · Finanças', cor:'#F59E0B', title:'Finanças — Use Cases + integração total',
+    tasks:['Use Cases: CreateTransactionUseCase, GetCashFlowUseCase, GetMonthlyReportUseCase','Controllers e routes: /api/v1/financial/','Integração total: Vendas → cria transação de entrada; Salários → cria transação de saída','Dashboard financeiro: fluxo de caixa actual, comparação mês anterior','Testa: 1 mês completo simulado com vendas, salários, e despesas'],
+    mentor:'Nesta semana o ERP funciona como um sistema integrado real. Uma venda impacta stock E finanças. Um salário impacta RH E finanças. Isso é o que diferencia um ERP de 4 apps separadas.' },
+  { n:18, fase:'Fase 4', cor:'#A78BFA', title:'Frontend — Setup + Auth + Layout',
+    tasks:['Vite + React + TypeScript + Tailwind CSS — cria o projecto','Configura React Router com rotas protegidas (verifica token antes de renderizar)','Layout principal: Sidebar com navegação, Header com utilizador logado, área de conteúdo','Página de Login funcional que chama POST /auth/login e guarda tokens','Axios instance com interceptors de auth e refresh token automático'],
+    mentor:'O frontend só começa na semana 18 porque a API está completa. Assim nunca bloqueias o backend à espera do frontend ou vice-versa. É por isso que a API Design na Fase 1 é importante.' },
+  { n:19, fase:'Fase 4', cor:'#A78BFA', title:'Frontend — Módulo Stock',
+    tasks:['useProducts hook com React Query — lista com paginação e filtros','Tabela de produtos com colunas ordenáveis, badge de stock crítico a vermelho','Formulário criar/editar produto com validação client-side (React Hook Form + Zod)','Modal de registo de movimentação (entrada/saída) com confirmação','Dashboard de Stock: total de produtos, alertas de stock mínimo, últimas movimentações'],
+    mentor:'React Query trata de cache, loading states e erro automaticamente. Não precisas de useState para dados do servidor — só useQuery e useMutation.' },
+  { n:20, fase:'Fase 4', cor:'#A78BFA', title:'Frontend — Módulos RH + Vendas',
+    tasks:['RH: lista de funcionários, ficha individual, registo de presenças','RH: formulário de processamento de salários com preview antes de confirmar','Vendas: lista de clientes, formulário de criação de ordem com selecção de produtos do catálogo','Vendas: visualização e download de factura PDF','Integração visual: ao criar venda, tabela de stock actualiza automaticamente (React Query invalidation)'],
+    mentor:'React Query invalidation é a funcionalidade mais poderosa do frontend: ao criar uma venda, chamas queryClient.invalidateQueries(["products"]) e a tabela de stock refresca sozinha.' },
+  { n:21, fase:'Fase 4', cor:'#A78BFA', title:'Frontend — Módulo Finanças + Dashboard global',
+    tasks:['Finanças: fluxo de caixa com gráfico de linha (Chart.js), tabela de transações','Finanças: balanço mensal com comparação ao mês anterior','Dashboard principal: KPIs dos 4 módulos numa página — vendas do mês, stock crítico, salários pendentes, saldo actual','Testa todos os fluxos end-to-end no browser com dados reais da base de dados'],
+    mentor:'O dashboard principal é o que o Director Geral da AgroMetal vê todos os dias. Deve dar a informação mais importante em menos de 10 segundos. Não sobrecarregues.' },
+  { n:22, fase:'Fase 5', cor:'var(--ciano)', title:'QA + Segurança',
+    tasks:['Escreve testes unitários para os Use Cases mais críticos com Vitest','Adiciona helmet() e express-rate-limit ao servidor Express','Verifica CORS: só o domínio do frontend está autorizado','Faz code review manual: há queries SQL concatenadas? Há passwords a ser retornadas na API?','Testa com utilizadores com diferentes roles: garante que warehouse não acede a RH'],
+    mentor:'Security review não é opcional. Um ERP com dados de salários e financeiros de uma empresa real tem de ser seguro. RBAC mal implementado é um problema sério.' },
+  { n:23, fase:'Fase 6', cor:'var(--ciano)', title:'Docker + Deploy + Logging',
+    tasks:['Escreve Dockerfile multi-stage para o backend','Actualiza docker-compose para incluir backend + PostgreSQL','Configura Winston: logs em JSON com timestamp, userId, acção realizada','Cria GET /health que verifica conexão à base de dados','Deploy inicial no Railway para ter uma URL pública para portfólio'],
+    mentor:'Uma URL pública do teu ERP a funcionar vale mais que 100 linhas no CV. "Posso mostrar ao vivo" numa entrevista é imbatível.' },
+  { n:24, fase:'Fase 6', cor:'var(--ciano)', title:'Documentação + Portfólio final', milestone:'🚀 Entrega completa',
+    tasks:['README.md completo: o que é, tecnologias, como correr localmente, screenshots','Adiciona o BRD, ADRs e ERD ao repositório (pasta /docs)','Grava um vídeo demo de 3-5 minutos a mostrar todos os módulos','Publica no GitHub com README profissional','Actualiza o CV com o projecto e a URL do deploy'],
+    mentor:'Este projecto transforma-te de "júnior com bases" em "júnior com projecto enterprise real". Não subestimes o que construíste. Apresenta-o com confiança.' },
+];
+
+const calGrid = document.getElementById('calGrid');
+semanas.forEach(s => {
+  const div = document.createElement('div');
+  div.className = 'cal-week';
+  const milHtml = s.milestone ? `<div class="cal-milestone" style="background:rgba(236,72,153,0.1);border:1px solid rgba(236,72,153,0.2);color:var(--rosa2)">${s.milestone}</div>` : '';
+  div.innerHTML = `
+    <div class="cal-week-num">
+      <div class="cal-week-label">SEM</div>
+      <div class="cal-week-n" style="color:${s.cor}">${s.n}</div>
+      <div class="cal-week-label" style="margin-top:4px;font-size:8px">${s.fase.split(' ')[0]+' '+s.fase.split(' ')[1]}</div>
+    </div>
+    <div class="cal-week-body">
+      ${milHtml}
+      <div class="cal-week-title" style="color:${s.cor}">${s.title}</div>
+      <div class="cal-tasks">
+        ${s.tasks.map(t => `<div class="cal-task">${t}</div>`).join('')}
+      </div>
+      <div class="cal-mentor">${s.mentor}</div>
+    </div>`;
+  calGrid.appendChild(div);
+});
+
+// ── Gantt ──────────────────────────────────────────────────────────────
+const ganttFases = [
+  { n:'Setup & Fundação',  h:'~16h',  c:'#64748B', s:0,  e:2  },
+  { n:'Fase 0 · Discovery',h:'~16h',  c:'#10B981', s:0,  e:2  },
+  { n:'Fase 1 · Design',   h:'~24h',  c:'#3B82F6', s:2,  e:7  },
+  { n:'Fase 2 · Setup',    h:'~8h',   c:'#64748B', s:7,  e:9  },
+  { n:'Auth + Core',       h:'~16h',  c:'#EC4899', s:8,  e:10 },
+  { n:'Módulo Stock',      h:'~40h',  c:'#3B82F6', s:9,  e:12 },
+  { n:'Módulo Vendas',     h:'~40h',  c:'#A78BFA', s:11, e:14 },
+  { n:'Módulo RH',         h:'~40h',  c:'#10B981', s:13, e:16 },
+  { n:'Módulo Finanças',   h:'~40h',  c:'#F59E0B', s:15, e:18 },
+  { n:'Frontend React',    h:'~32h',  c:'#A78BFA', s:17, e:22 },
+  { n:'QA + Segurança',    h:'~8h',   c:'#22D3EE', s:21, e:23 },
+  { n:'Deploy + Docs',     h:'~8h',   c:'#22D3EE', s:22, e:24 },
+];
+const gh = document.getElementById('ganttHeader');
+for(let i=1;i<=24;i++){const d=document.createElement('div');d.className='gantt-wh';d.textContent='S'+i;gh.appendChild(d);}
+const gb = document.getElementById('ganttBody');
+ganttFases.forEach(f=>{
+  const row=document.createElement('div');row.className='gantt-row2';
+  let cells='';
+  for(let i=0;i<24;i++){
+    if(i===f.s){
+      const w=f.e-f.s;
+      cells+=`<div class="gantt-cell2"><div class="gantt-fill" style="background:${f.c};opacity:0.8;width:calc(${w*100}% - 2px)">${f.n}</div></div>`;
+    } else { cells+=`<div class="gantt-cell2"></div>`; }
+  }
+  row.innerHTML=`
+    <div class="gantt-info2">
+      <div class="gantt-dot2" style="background:${f.c}"></div>
+      <div><div class="gantt-name2">${f.n}</div><div class="gantt-hrs2">${f.h}</div></div>
+    </div>
+    <div class="gantt-bars">${cells}</div>`;
+  gb.appendChild(row);
+});
+
+// ── User Stories ──────────────────────────────────────────────────────
+const stories = [
+  { id:'US-01', mod:'STOCK',    modCor:'#3B82F6', modBg:'rgba(59,130,246,0.1)',
+    text:'Como gestor de armazém, quero registar a entrada de matéria-prima com quantidade e fornecedor, para manter o inventário actualizado em tempo real.',
+    ac:['DADO QUE estou autenticado com role warehouse ou admin','QUANDO submeto o formulário de entrada com produto, quantidade e fornecedor','ENTÃO o stock do produto é incrementado e uma movimentação é registada com timestamp'] },
+  { id:'US-02', mod:'STOCK',    modCor:'#3B82F6', modBg:'rgba(59,130,246,0.1)',
+    text:'Como gestor de armazém, quero receber um alerta quando o stock de um produto atinge o mínimo definido, para evitar paragens de produção.',
+    ac:['DADO QUE o stock_minimo de "Chapa A36 3mm" é 100 unidades','QUANDO o stock actual fica abaixo de 100','ENTÃO o produto aparece com estado "Stock Crítico" no dashboard e um alerta é gerado'] },
+  { id:'US-03', mod:'RH',       modCor:'#10B981', modBg:'rgba(16,185,129,0.1)',
+    text:'Como director de RH, quero processar os salários mensais de todos os funcionários de uma vez, para reduzir o tempo de 4 dias para menos de 4 horas.',
+    ac:['DADO QUE é o fim do mês e os registos de presença estão completos','QUANDO executo o processamento mensal para o mês de referência','ENTÃO o sistema calcula salário base + subsídios - descontos para cada funcionário e gera os recibos'] },
+  { id:'US-04', mod:'FINANÇAS', modCor:'#F59E0B', modBg:'rgba(245,158,11,0.1)',
+    text:'Como director financeiro, quero ver o fluxo de caixa actual em tempo real, para tomar decisões de pagamento sem esperar o fim do mês.',
+    ac:['DADO QUE estou autenticado com role accountant ou admin','QUANDO acedo ao dashboard financeiro','ENTÃO vejo o saldo actual, entradas e saídas do mês, e comparação com o mês anterior — actualizados em tempo real'] },
+  { id:'US-05', mod:'VENDAS',   modCor:'#A78BFA', modBg:'rgba(167,139,250,0.1)',
+    text:'Como comercial, quero criar um orçamento com produtos do catálogo e convertê-lo em factura com um clique, para eliminar erros de facturação manual.',
+    ac:['DADO QUE existe um cliente registado e produtos no catálogo com preços','QUANDO crio uma ordem e selecciono os produtos e quantidades','ENTÃO o sistema calcula o total, gera a factura em PDF e baixa o stock automaticamente'] },
+  { id:'US-06', mod:'AUTH',     modCor:'#EC4899', modBg:'rgba(236,72,153,0.1)',
+    text:'Como administrador, quero definir o que cada tipo de utilizador pode ver e fazer no sistema, para garantir que dados sensíveis só são acessíveis a quem tem permissão.',
+    ac:['DADO QUE existe um utilizador com role "sales"','QUANDO tenta aceder a /hr/employees ou /financial/transactions','ENTÃO recebe erro 403 Forbidden e o acesso é negado'] },
+];
+const sg = document.getElementById('storiesGrid');
+stories.forEach(s=>{
+  const d=document.createElement('div');d.className='story-card';
+  d.innerHTML=`
+    <div class="story-header">
+      <div class="story-id">${s.id}</div>
+      <div class="story-module" style="background:${s.modBg};color:${s.modCor};border:1px solid ${s.modCor}33">${s.mod}</div>
+      <div class="story-text">${s.text}</div>
+    </div>
+    <div class="story-ac">
+      <div class="story-ac-title">ACCEPTANCE CRITERIA</div>
+      ${s.ac.map(a=>`<div class="ac-item">${a}</div>`).join('')}
+    </div>`;
+  sg.appendChild(d);
+});
+
+// ── ERD Tables ────────────────────────────────────────────────────────
+const tables = [
+  { name:'users', color:'#EC4899', fields:[
+    {n:'id',t:'UUID PK',c:'erd-pk'},{n:'email',t:'VARCHAR UNIQUE'},{n:'password_hash',t:'VARCHAR'},{n:'role_id',t:'UUID FK',c:'erd-fk'},{n:'is_active',t:'BOOLEAN'},{n:'created_at',t:'TIMESTAMPTZ'}]},
+  { name:'products', color:'#3B82F6', fields:[
+    {n:'id',t:'UUID PK',c:'erd-pk'},{n:'name',t:'VARCHAR NOT NULL'},{n:'sku',t:'VARCHAR UNIQUE',c:'erd-pk'},{n:'category_id',t:'UUID FK',c:'erd-fk'},{n:'current_stock',t:'INTEGER'},{n:'minimum_stock',t:'INTEGER'},{n:'cost_price',t:'NUMERIC(10,2)'},{n:'deleted_at',t:'TIMESTAMPTZ NULL'}]},
+  { name:'stock_movements', color:'#3B82F6', fields:[
+    {n:'id',t:'UUID PK',c:'erd-pk'},{n:'product_id',t:'UUID FK',c:'erd-fk'},{n:'type',t:"CHECK IN/OUT"},{n:'quantity',t:'INTEGER'},{n:'reason',t:'TEXT'},{n:'created_by',t:'UUID FK',c:'erd-fk'},{n:'created_at',t:'TIMESTAMPTZ'}]},
+  { name:'employees', color:'#10B981', fields:[
+    {n:'id',t:'UUID PK',c:'erd-pk'},{n:'full_name',t:'VARCHAR'},{n:'department_id',t:'UUID FK',c:'erd-fk'},{n:'base_salary',t:'NUMERIC(10,2)'},{n:'hire_date',t:'DATE'},{n:'is_active',t:'BOOLEAN'},{n:'deleted_at',t:'TIMESTAMPTZ NULL'}]},
+  { name:'transactions', color:'#F59E0B', fields:[
+    {n:'id',t:'UUID PK',c:'erd-pk'},{n:'account_id',t:'UUID FK',c:'erd-fk'},{n:'category_id',t:'UUID FK',c:'erd-fk'},{n:'type',t:"CHECK IN/OUT"},{n:'amount',t:'NUMERIC(12,2)'},{n:'description',t:'TEXT'},{n:'reference_id',t:'UUID NULL'},{n:'created_at',t:'TIMESTAMPTZ'}]},
+  { name:'orders', color:'#A78BFA', fields:[
+    {n:'id',t:'UUID PK',c:'erd-pk'},{n:'customer_id',t:'UUID FK',c:'erd-fk'},{n:'status',t:"VARCHAR CHECK"},{n:'total_amount',t:'NUMERIC(12,2)'},{n:'created_by',t:'UUID FK',c:'erd-fk'},{n:'invoice_id',t:'UUID FK NULL',c:'erd-fk'},{n:'created_at',t:'TIMESTAMPTZ'}]},
+];
+const et = document.getElementById('erdTables');
+tables.forEach(t=>{
+  const d=document.createElement('div');d.className='erd-table';
+  d.innerHTML=`<div class="erd-table-name" style="color:${t.color};border-bottom-color:${t.color}33">${t.name}</div>
+    ${t.fields.map(f=>`<div class="erd-field"><span class="${f.c||''}">${f.n}</span><span class="erd-type">${f.t}</span></div>`).join('')}`;
+  et.appendChild(d);
+});
+
+// ── ADRs ──────────────────────────────────────────────────────────────
+const adrs = [
+  { id:'ADR-001', title:'Raw SQL com node-postgres (pg) em vez de Prisma', status:'ACEITE',
+    ctx:'O projecto usa PostgreSQL para persistência. A escolha do mecanismo de acesso à DB afecta performance, tipo-segurança e curva de aprendizagem.',
+    dec:'Usar node-postgres (pg) com Pool e queries SQL manuais parametrizadas. O desenvolvedor tem experiência em DBA e prefere controlo total sobre as queries.',
+    cons:'Mais verboso que Prisma. Migrations manuais. Sem type-safety automática nas queries — compensado com TypeScript nas camadas de domínio.' },
+  { id:'ADR-002', title:'Clean Architecture em vez de MVC simples', status:'ACEITE',
+    ctx:'O ERP tem lógica de negócio complexa (cálculos salariais, transacções financeiras, integrações entre módulos). MVC simples mistura lógica de negócio com HTTP.',
+    dec:'Adoptar Clean Architecture: Domain → Application (Use Cases) → Infrastructure → Interfaces. A lógica de negócio não depende de Express nem de pg.',
+    cons:'Mais código inicial (interfaces, mappers). Compensado pela testabilidade: Use Cases testados sem DB, e pela manutenibilidade a longo prazo.' },
+  { id:'ADR-003', title:'JWT stateless em vez de sessions com Redis', status:'ACEITE',
+    ctx:'Sistema deve funcionar em LAN sem internet contínua. Sessões com Redis exigem infraestrutura adicional.',
+    dec:'JWT com accessToken (15min) e refreshToken (7 dias, guardado em DB). Stateless — o servidor não guarda estado de sessão.',
+    cons:'Revogação de tokens mais complexa (exige blacklist na DB). Compensa pela simplicidade de deploy em ambiente LAN sem Redis.' },
+  { id:'ADR-004', title:'UUID em vez de IDs sequenciais (SERIAL/INTEGER)', status:'ACEITE',
+    ctx:'IDs sequenciais expõem o volume de dados da empresa (ex: a factura 0043 revela que há menos de 50 facturas). Risco de segurança e de scraping.',
+    dec:'Usar UUID v4 gerado pelo PostgreSQL (gen_random_uuid()) como PK em todas as tabelas.',
+    cons:'UUIDs são maiores (16 bytes vs 4). Índices ligeiramente maiores. Sem impacto perceptível para o volume de dados deste ERP.' },
+];
+const al = document.getElementById('adrList');
+adrs.forEach(a=>{
+  const d=document.createElement('div');d.className='adr-card';
+  d.innerHTML=`
+    <div class="adr-header">
+      <div class="adr-id">${a.id}</div>
+      <div class="adr-title">${a.title}</div>
+      <div class="adr-status">● ${a.status}</div>
+    </div>
+    <div class="adr-body">
+      <div><div class="adr-section-t">CONTEXTO</div><div class="adr-text">${a.ctx}</div></div>
+      <div><div class="adr-section-t">DECISÃO</div><div class="adr-text">${a.dec}</div></div>
+      <div style="grid-column:1/-1"><div class="adr-section-t">CONSEQUÊNCIAS</div><div class="adr-text">${a.cons}</div></div>
+    </div>`;
+  al.appendChild(d);
+});
+
+// ── Charts ────────────────────────────────────────────────────────────
+let chartsBuilt = false;
+function buildCharts() {
+  if (chartsBuilt) return;
+  chartsBuilt = true;
+  const grid = { color:'rgba(99,130,190,0.08)' };
+  const tick = { color:'#64748B', font:{ family:'JetBrains Mono', size:10 } };
+
+  new Chart(document.getElementById('c1'), {
+    type:'doughnut',
+    data:{
+      labels:['Setup','Fase 0+1 (Design)','Auth','Stock','Vendas','RH','Finanças','Frontend','QA+Deploy'],
+      datasets:[{data:[8,24,16,24,24,24,24,32,16],
+        backgroundColor:['#64748B','#10B981','#EC4899','#3B82F6','#A78BFA','#10B981','#F59E0B','#A78BFA','#22D3EE'],
+        borderWidth:2,borderColor:'#131929',hoverOffset:6}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
+      plugins:{legend:{position:'right',labels:{color:'#94A3B8',font:{family:'JetBrains Mono',size:10},boxWidth:8,padding:8}}}}
+  });
+
+  const weeks=Array.from({length:24},(_,i)=>`S${i+1}`);
+  new Chart(document.getElementById('c2'), {
+    type:'line',
+    data:{labels:weeks,datasets:[
+      {label:'Horas acumuladas',data:weeks.map((_,i)=>(i+1)*8),borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,0.06)',borderWidth:2,pointRadius:2,fill:true,tension:0.2},
+      {label:'Marco S7 (portfólio)',data:weeks.map((_,i)=>i===6?56:null),borderColor:'#EC4899',backgroundColor:'rgba(236,72,153,0.5)',pointRadius:6,pointStyle:'star',showLine:false}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#94A3B8',font:{family:'JetBrains Mono',size:10},boxWidth:8}}},
+      scales:{x:{ticks:tick,grid:grid},y:{ticks:tick,grid:grid}}}
+  });
+
+  new Chart(document.getElementById('c3'), {
+    type:'bar',
+    data:{labels:['Stock','Vendas','RH','Finanças'],datasets:[
+      {label:'Entidades',data:[6,7,8,6],backgroundColor:'rgba(59,130,246,0.7)',borderRadius:4},
+      {label:'Integrações',data:[2,4,3,5],backgroundColor:'rgba(167,139,250,0.7)',borderRadius:4},
+      {label:'Regras negócio',data:[5,6,7,9],backgroundColor:'rgba(245,158,11,0.7)',borderRadius:4},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#94A3B8',font:{family:'JetBrains Mono',size:10},boxWidth:8}}},
+      scales:{x:{ticks:tick,grid:{display:false}},y:{ticks:tick,grid:grid}}}
+  });
+
+  new Chart(document.getElementById('c4'), {
+    type:'radar',
+    data:{labels:['Técnico','Prazo','Dependências','Complexidade','Integrações'],
+      datasets:[
+        {label:'Stock',data:[4,3,2,5,3],borderColor:'#3B82F6',backgroundColor:'rgba(59,130,246,0.1)',borderWidth:2,pointRadius:3,pointBackgroundColor:'#3B82F6'},
+        {label:'Finanças',data:[6,7,7,9,8],borderColor:'#F59E0B',backgroundColor:'rgba(245,158,11,0.1)',borderWidth:2,pointRadius:3,pointBackgroundColor:'#F59E0B'},
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#94A3B8',font:{family:'JetBrains Mono',size:10},boxWidth:8}}},
+      scales:{r:{min:0,max:10,ticks:{display:false},grid:{color:'rgba(99,130,190,0.12)'},angleLines:{color:'rgba(99,130,190,0.12)'},pointLabels:{color:'#94A3B8',font:{family:'JetBrains Mono',size:10}}}}}
+  });
+}
+</script>
+</body>
+</html>
