@@ -18,7 +18,7 @@ This system replaces those manual processes with an integrated platform covering
 
 | Module | Description | Status |
 |--------|-------------|--------|
-| **Stock** | Product catalog, stock movements, low-stock alerts, inventory reports | 🔵 In development |
+| **Stock** | Product catalog, stock movements, low-stock alerts, inventory reports | ⏳ Planned |
 | **HR** | Employee records, attendance tracking, monthly payroll processing | ⏳ Planned |
 | **Finance** | Accounts payable/receivable, cash flow, monthly reports | ⏳ Planned |
 | **Sales** | Customer management, quotations, invoicing with PDF export | ⏳ Planned |
@@ -156,8 +156,8 @@ All project documentation lives in the [`/docs`](./docs) folder:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/erp-agrometalurgica.git
-cd erp-agrometalurgica
+git clone https://github.com/Gabrielpedroaurelio/extrasoft-erp-industrial-enterprise.git
+cd extrasoft-erp-industrial-enterprise
 
 # Start the database
 docker-compose up -d db
