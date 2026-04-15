@@ -133,12 +133,12 @@ All project documentation lives in the [`/docs`](./docs) folder:
 
 | Document | Description |
 |----------|-------------|
-| [`BRD_AgroMetal_ERP.pdf`](./docs/BRD_AgroMetal_ERP.pdf) | Business Requirements Document — problem statement, stakeholders, success criteria |
+| [`BRD_AgroMetal_ERP.pdf`](./docs/BRD_AgroMetal-ERP/BRD_AgroMetal_ERP.pdf) | Business Requirements Document — problem statement, stakeholders, success criteria |
 | [`roadmap.html`](./docs/roadmap.html) | Full engineering roadmap — phases, Gantt chart, calendar, MoSCoW, user stories, ERD preview, ADRs |
-| [`ADR-001`](./docs/adr/ADR-001-raw-sql.md) | Why raw SQL with pg instead of Prisma |
-| [`ADR-002`](./docs/adr/ADR-002-clean-architecture.md) | Why Clean Architecture instead of simple MVC |
-| [`ADR-003`](./docs/adr/ADR-003-jwt.md) | Why stateless JWT instead of Redis sessions |
-| [`ADR-004`](./docs/adr/ADR-004-uuid.md) | Why UUID instead of sequential IDs |
+| [`ADR-001`](./docs/System-Disign-and-Architecture/adr/ADR-001-raw-sql.md) | Why raw SQL with pg instead of Prisma |
+| [`ADR-002`](./docs/System-Disign-and-Architecture/adr/ADR-002-clean-architecture.md) | Why Clean Architecture instead of simple MVC |
+| [`ADR-003`](./docs/System-Disign-and-Architecture/adr/ADR-003-jwt.md) | Why stateless JWT instead of Redis sessions |
+| [`ADR-004`](./docs/System-Disign-and-Architecture/adr/ADR-004-uuid.md) | Why UUID instead of sequential IDs |
 
 ---
 
