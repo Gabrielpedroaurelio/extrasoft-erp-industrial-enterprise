@@ -31,7 +31,7 @@ This system replaces those manual processes with an integrated platform covering
 ![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=flat&logo=nodedotjs&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat&logo=typescript&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat&logo=postgresql&logoColor=white)
-![Express](https://img.shields.io/badge/Express-4-000000?style=flat&logo=express&logoColor=white)
+![NestJS](https://img.shields.io/badge/NestJS-4-000000?style=flat&logo=nestjs&logoColor=white)
 
 - **Runtime**: Node.js 20 + TypeScript (strict mode)
 - **Framework**: Express.js
@@ -41,15 +41,14 @@ This system replaces those manual processes with an integrated platform covering
 - **Architecture**: Clean Architecture (Domain → Application → Infrastructure → Interfaces)
 
 ### Frontend
-![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react&logoColor=black)
+![Angular](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=angular&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat&logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=flat&logo=tailwindcss&logoColor=white)
 
-- **Framework**: React 18 + TypeScript
+- **Framework**: Angular 21 + TypeScript
 - **Styling**: Tailwind CSS
-- **Data fetching**: React Query (TanStack Query)
 - **HTTP client**: Axios with request/response interceptors
-- **Routing**: React Router v6 with protected routes
+- **Routing**: Route Guards 
 
 ### Infrastructure
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat&logo=docker&logoColor=white)
@@ -113,8 +112,8 @@ src/
 ## Project Status
 
 ```
-Phase 0 — Discovery & Requirements     ████████░░  80%  ← User Stories in progress
-Phase 1 — System Design & Architecture ░░░░░░░░░░   0%  ← Next
+Phase 0 — Discovery & Requirements     ██████████  100%  ← Completed
+Phase 1 — System Design & Architecture ███░░░░░░░   38%  ← Use Cases In progress
 Phase 2 — Project Setup                ░░░░░░░░░░   0%
 Phase 3 — Backend Development          ░░░░░░░░░░   0%
 Phase 4 — Frontend Development         ░░░░░░░░░░   0%
@@ -134,7 +133,6 @@ All project documentation lives in the [`/docs`](./docs) folder:
 | Document | Description |
 |----------|-------------|
 | [`BRD_AgroMetal_ERP.pdf`](./docs/BRD_AgroMetal-ERP/BRD_AgroMetal_ERP.pdf) | Business Requirements Document — problem statement, stakeholders, success criteria |
-| [`roadmap.html`](./docs/roadmap.html) | Full engineering roadmap — phases, Gantt chart, calendar, MoSCoW, user stories, ERD preview, ADRs |
 | [`ADR-001`](./docs/System-Disign-and-Architecture/adr/ADR-001-raw-sql.md) | Why raw SQL with pg instead of Prisma |
 | [`ADR-002`](./docs/System-Disign-and-Architecture/adr/ADR-002-clean-architecture.md) | Why Clean Architecture instead of simple MVC |
 | [`ADR-003`](./docs/System-Disign-and-Architecture/adr/ADR-003-jwt.md) | Why stateless JWT instead of Redis sessions |
